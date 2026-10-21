@@ -11,39 +11,51 @@ client = OpenAI(
     api_key=api_key
 )
 
-# PARSER CONFIGURATION
-parser = argparse.ArgumentParser(description="AI Agent Beta")
-parser.add_argument(
-    "user_prompt",
-    type=str,
-    help="User promt",
-    
-)
-args = parser.parse_args()
 
-response = client.chat.completions.create(
-    model="openrouter/free",
-    messages=[
+
+def main():
+    # PARSER CONFIGURATION
+    parser = argparse.ArgumentParser(description="AI Agent Beta")
+    parser.add_argument(
+        "user_prompt",
+        type=str,
+        help="User promt",
+        
+    )
+
+    parser.add_argument(
+        "--verbose", 
+        action="store_true", 
+        help="Enable verbose output"
+    )
+    args = parser.parse_args()
+
+    messages = [
         {
             "role": "user",
             "content": args.user_prompt,
         }
-    ],
-)
+    ]
 
 
 
+    response = client.chat.completions.create(
+        model="openrouter/free",
+        messages=messages,
+    )
 
-def main():
-    print("Hello from ai-agent-beta!")
+
+    # print("Hello from ai-agent-beta!")
 
     if response.usage == None:
         raise RuntimeError("Response usage is None")
-    print(f"Prompt tokens: {response.usage.prompt_tokens}")
-    print(f"Response tokens: {response.usage.completion_tokens}")
-
-
-    print(response.choices[0].message.content)
+    elif response.usage != None and args.verbose == True:
+        print(f"User prompt: {args.user_prompt}")
+        print(f"Prompt tokens: {response.usage.prompt_tokens}")
+        print(f"Response tokens: {response.usage.completion_tokens}")
+        print(response.choices[0].message.content)
+    else:
+        print(response.choices[0].message.content)
 
 
 if __name__ == "__main__":
