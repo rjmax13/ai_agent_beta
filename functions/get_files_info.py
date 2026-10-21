@@ -9,7 +9,17 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
             return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
         if not os.path.isdir(target_dir):
             return f'Error: "{target_dir}" is not a directory'
-        return f'Success: "{directory}" is within the working directory'
+        for item in os.listdir(target_dir):
+            if 'meta_data' not in locals():
+                meta_data = []
+            name = item
+            file_size = os.path.getsize(os.path.join(target_dir, item))
+            is_dir = os.path.isdir(os.path.join(target_dir, item))
+            meta_data.append(f"- {name}: file_size={file_size} bytes, is_dir={is_dir}")
+        return "\n".join(meta_data)
+
     except Exception as e:
         return f'Error: Failed to resolve target directory: {e}'
+
+    
     
