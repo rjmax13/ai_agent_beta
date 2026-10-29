@@ -1,6 +1,31 @@
 import os
 import subprocess
 
+schema_run_python_file = {
+    "type": "function",
+    "function": {
+        "name": "run_python_file",
+        "description": "Run a Python file with optional arguments",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Relative path to the Python file"
+                },
+                "args": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Optional list of arguments to pass to the Python file"
+                }
+            },
+            "required": ["file_path"]
+        }
+    }
+}
+
 def run_python_file(working_directory: str, file_path: str, args: list[str] | None = None) -> str:
     timeout = 30
     if args is None:
