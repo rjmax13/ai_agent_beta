@@ -22,10 +22,10 @@ schema_write_file = {
     }
 }
 
-def write_file(work_directory, file_path, content):
+def write_file(working_directory, file_path, content):
 
     try:
-        abs_working_dir = os.path.abspath(work_directory)
+        abs_working_dir = os.path.abspath(working_directory)
         target_dir = os.path.normpath(os.path.join(abs_working_dir, file_path))
         
         if not os.path.commonpath([abs_working_dir, target_dir]) == abs_working_dir:
